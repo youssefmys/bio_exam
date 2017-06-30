@@ -1,0 +1,25 @@
+<html>
+
+  <head>
+    <link rel = "stylesheet"  href = "/stylesheets/form_style.css" type = "text/css">
+  </head>
+
+ <body>
+  <div class = "form-box">
+  <form action = "/users/login" method = "post">
+    <h3>Login to Bio-test</h3>
+    <label for = "username">Username:</label>
+    <input type = "text" name = "user[username]" id = "username" placeholder="username"/><br><br>
+    <label fot = "password"> Password:</label>
+    <input type = "password" name = "user[password]" id = "password" placeholder = "user password"><br><br>
+    <button type = "submit" id = "submit" >Log in</button>
+
+    <%if flash[:message] %>
+      <h3 id = "error_message"><%=flash[:message] %></h3>
+    <%end %>
+
+  </form>
+  </div>
+ </body>
+
+</html>

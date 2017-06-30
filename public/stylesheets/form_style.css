@@ -1,0 +1,58 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.form-box {
+  width: 50% ;
+  margin: 0 auto ;
+  padding: 5px ;
+  border: 1 solid #000000 ;
+  background-color: #1DA1F2;
+  box-shadow: 5px 5px 5px gray ;
+  border-radius: 5px ;
+}
+
+.form-box form button#submit{
+  display: block;
+  box-shadow: none;
+  border: 1px solid #FFF;
+  color: #000;
+  background-color: #FFF;
+  border-radius: 5px ;
+  height: 30px ;
+  margin: 0 auto ;
+}
+
+.form-box form label {
+  display: inline-block;
+  width: 30% ;
+  color: #FFF ;
+}
+
+.form-box form input[type = "text"],
+.form-box form input[type = "password"],
+.form-box form input[type = "email"]{
+  width: 60% ;
+  height: 25px ;
+}
+
+.form-box form h3 {
+  text-align: center;
+  color: #FFF;
+}
+
+.form-box form #error_message {
+  color: red ;
+}
+@media only screen and (max-width: 572px) {
+  .form-box {
+      width: 295px ;
+  }
+}
+
+@media only screen and (min-width: 849px) {
+  .form-box {
+      width: 424px ;
+  }
+}

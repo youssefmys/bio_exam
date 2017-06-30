@@ -1,0 +1,36 @@
+<html>
+
+<head>
+  <link rel = "stylesheet"  href = "/stylesheets/form_style.css" type = "text/css">
+</head>
+
+<body>
+  <div class = "form-box">
+    <form action = "/users/signup" method = "post">
+      <h3>Sign up to Bio-test</h3>
+      <label for = "username">Username:</label>
+      <input type = "text" name = "user[username]" id = "username" placeholder="username"/><br><br>
+
+      <label for = "email">E-mail:</label>
+      <input type = "email" name = "user[email]" id = "email" placeholder="You e-mail address"/><br><br>
+
+      <label fot = "password"> Password:</label>
+      <input type = "password" name = "user[password]" id = "password" placeholder = "user password"><br><br>
+
+      <label for = "select"> User mode </label>
+      <select name = "user_type" id = "user_type">
+        <option value = "student">Student</option>
+        <option value = "teacher">Teacher </option>
+      </select><br><br>
+
+      <button type = "submit" id = "submit" >Sign up</button>
+
+      <%if flash[:message] %>
+        <h3 id = "error_message"><%=flash[:message] %></h3>
+      <%end %>
+
+      </form>
+    </div>
+  </body>
+
+  </html>
