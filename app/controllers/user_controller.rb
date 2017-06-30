@@ -1,24 +1,28 @@
 class UserController < ApplicationController
 
   use Rack::Flash
+
+  get "/users/:slug" do
+      erb :"users/show"
+  end
+
   get "/users/login" do
     erb :"users/login"
   end
 
   post "/users/login" do
-    if user = Teacher.find_by(:username => params[:username])
-      user.authenticate(params[:password])
-      sessions[:id] = user.id
-      sessions[:user_type] = "teacher"
-      redirect "/exams"
-    elsif user = Student.find_by(:username => params[:username])
-      sessions[:id] = user.id
-      sessions[:user_type] = "student"
+
+    username = params[:user][:username]
+    pass = params[:user][:password]
+
+    if empty_field?(username) || empty_field?(pass)
+      erb :"users/login"
+    elsif find_and_authenticate(username, pass)
       redirect "/exams"
     else
-      flash[:message] = "Wrong username or password!"
-      erb :"/users/login"
+      erb :"users/login"
     end
+
   end
 
   get "/users/logout" do
@@ -27,19 +31,26 @@ class UserController < ApplicationController
 
   get "/users/signup" do
     if loggedIn
-      redirect "/tests"
+      redirect "/users/#{currentUser.slug}"
     else
       erb :"users/signup"
     end
   end
 
   post "/users/signup" do
-    if user = Teacher.find_by(:username => params[:username])
-      flash[:message] = "username already exists!"
-      redirect "/users/signup"
-    end
-    params[:user_type] == "teacher"? Teacher.create(params[:user]) : User.create(params[:user])
-  end
+    username = params[:user][:username]
+    pass = params[:user][:password]
+    email = params[:user][:email]
 
+    if empty_field?(username) || empty_field?(pass) || empty_field?(email)
+      erb :"/users/signup"
+    elsif user_exists?(username)
+      erb :"/users/signup"
+    else
+      params[:user_type] == "teacher"? Teacher.create(params[:user]) : Student.create(params[:user])
+      redirect "/users/#{currentUser.slug}"
+    end
+
+  end
 
 end
