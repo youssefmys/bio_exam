@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20170630063404) do
   create_table "answers", force: :cascade do |t|
     t.string "content"
     t.boolean "right_answer", default: false
+    t.integer "question_id"
   end
 
   create_table "exams", force: :cascade do |t|

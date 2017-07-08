@@ -14,11 +14,60 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/" do
+    if loggedIn
+      redirect "/users/#{currentUser.slug}"
+    end
     erb :index
   end
 
   get "/exams" do
 
+  end
+
+  get  '/create_exam' do
+    if loggedIn
+      if session[:user_type] == 'teacher'
+        erb :"exams/new"
+      end
+    else
+      redirect '/users/login'
+    end
+  end
+
+  get '/create_question' do
+    if loggedIn
+      if session[:user_type] == "teacher"
+        @exam = Exam.find_by(:id => params[:exam_id])
+        erb :"questions/new"
+      end
+    else
+      redirect "/users/login"
+    end
+  end
+
+  post '/questions' do
+    question = Question.create(params[:question])
+    params[:answers].each do |answer|
+      answer = Answer.create(answer)
+      question.answers << answer
+    end
+
+    exam = Exam.find_by(:id => params[:exam_id])
+
+    question.exams << exam
+    question.save
+    redirect "/exams/#{exam.id}"
+  end
+
+  get '/exams/:id' do
+    @exam = Exam.find_by(:id => params[:id])
+    erb :"exams/show"
+  end
+
+  post '/exams' do
+    exam = Exam.create(params[:exam])
+    currentUser.exams << exam
+    redirect "/exams/#{exam.id}"
   end
 
   helpers do
@@ -82,7 +131,6 @@ class ApplicationController < Sinatra::Base
         end
        end
     end
-
 
   end
 

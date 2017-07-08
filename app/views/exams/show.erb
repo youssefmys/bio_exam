@@ -5,10 +5,14 @@
   Exam title : <%= @exam.name %> <br>
   <% if !@exam.questions.empty? %>
     <% @exam.questions.each_with_index do |question, index|%>
-      <%= "index - #{question.content}" %> <br>
+      <h3><%= "#{index + 1} - #{question.content}" %></h3> 
+      <% question.answers.each_with_index do |answer, index| %>
+        <%="   #{('a'..'d').to_a[index]} - #{answer.content} "%> <br>
+      <% end %>
     <% end %>
   <% end %>
   <form action = "/create_question" method =  "get">
+    <input type = "hidden" name = "exam_id" value = "<%= @exam.id %>" >
     <button type = "submit">Add question</button>
   </form>
 </body>

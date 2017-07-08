@@ -2,10 +2,15 @@
   <head>
   </head>
   <body>
-    <h3>Show page</h3>
     <h3>Welcome, <%=@user.username %></h3>
     <h3>your email is <%=@user.email %></h3>
-    <h3>you are a <%= @user.class.to_s %></h3>
+    <h3>you have a <%= @user.class.to_s %> account</h3>
+    <% if !@user.exams.empty? %>
+      <h3>Exams:</h3>
+      <% @user.exams.each do |exam|%>
+        <a href = "/exams/<%=exam.id %>"><%= exam.name %></a><br>
+      <% end %>
+    <% end %>
   </body>
 
 </html>
