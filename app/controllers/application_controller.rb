@@ -5,11 +5,12 @@ class ApplicationController < Sinatra::Base
 
   use Rack::Flash
 
+
   configure do
-    set :sessions, true
+    enable :sessions
     set :views, Proc.new {File.join(root, "../views")}
     set :public_folder, Proc.new {File.join(root, "../../public")}
-    set :session_secrete, "secrete"
+    set :session_secret, "secrete"
   end
 
   get "/" do
@@ -29,7 +30,7 @@ class ApplicationController < Sinatra::Base
     def currentUser
       if teacher = Teacher.find_by(:id => session[:id])
         return teacher
-      elsif student = User.find_by(:id => session[:id])
+      elsif student = Student.find_by(:id => session[:id])
         return student
       else
         return nil
@@ -67,11 +68,21 @@ class ApplicationController < Sinatra::Base
         if type.find_by(username: username)
           flash[:message] = "Username already exists!"
           return true
+        end
+      end
+      return false
+    end
+
+    def find_by_slug(slug_name)
+      [Teacher, Student].each do |type|
+        if user = type.find_by_slug(slug_name)
+          return user
         else
           return false
         end
-      end
+       end
     end
+
 
   end
 

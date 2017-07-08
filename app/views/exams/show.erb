@@ -1,0 +1,15 @@
+<html>
+<head>
+</head>
+<body>
+  Exam title : <%= @exam.name %> <br>
+  <% if !@exam.questions.empty? %>
+    <% @exam.questions.each_with_index do |question, index|%>
+      <%= "index - #{question.content}" %> <br>
+    <% end %>
+  <% end %>
+  <form action = "/create_question" method =  "get">
+    <button type = "submit">Add question</button>
+  </form>
+</body>
+</html>

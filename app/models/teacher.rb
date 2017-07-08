@@ -1,4 +1,8 @@
 class Teacher < ActiveRecord::Base
+
+  include Sluggable::InstanceMethods
+  extend Sluggable::ClassMethods
+
   validates :username, :email, :password, :presence => true
 
   has_many :studnets, :through => :teacher_students

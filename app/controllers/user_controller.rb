@@ -1,32 +1,30 @@
 class UserController < ApplicationController
 
-  use Rack::Flash
-
-  get "/users/:slug" do
-      erb :"users/show"
-  end
+  enable :sessions
 
   get "/users/login" do
-    erb :"users/login"
-  end
-
-  post "/users/login" do
-
-    username = params[:user][:username]
-    pass = params[:user][:password]
-
-    if empty_field?(username) || empty_field?(pass)
-      erb :"users/login"
-    elsif find_and_authenticate(username, pass)
-      redirect "/exams"
+    if loggedIn
+      redirect "/users/#{currentUser.slug}"
     else
       erb :"users/login"
     end
 
   end
 
+  post "/users/login" do
+    if params[:user].values.any?{|v| empty_field?(v)}
+      erb :"users/login"
+    elsif user = find_and_authenticate(params[:user][:username], params[:user][:password])
+      session[:id] = user.id
+      session[:user_type] = user.class.to_s.downcase
+      redirect "/users/#{currentUser.slug}"
+    else
+      erb :"users/login"
+    end
+  end
+
   get "/users/logout" do
-    sessions.clear
+    session.clear
   end
 
   get "/users/signup" do
@@ -38,19 +36,22 @@ class UserController < ApplicationController
   end
 
   post "/users/signup" do
-    username = params[:user][:username]
-    pass = params[:user][:password]
-    email = params[:user][:email]
-
-    if empty_field?(username) || empty_field?(pass) || empty_field?(email)
+    if params[:user].values.any?{|v| empty_field?(v)}
       erb :"/users/signup"
-    elsif user_exists?(username)
+    elsif user_exists?(username = params[:user][:username])
       erb :"/users/signup"
     else
-      params[:user_type] == "teacher"? Teacher.create(params[:user]) : Student.create(params[:user])
-      redirect "/users/#{currentUser.slug}"
+      params[:user_type] == "teacher" ? user = Teacher.create(params[:user]) : user = Student.create(params[:user])
+      session[:id] = user.id
+      session[:user_type] = user.class.to_s.downcase
+      redirect "/users/#{user.slug}"
     end
+  end
 
+  get "/users/:slug" do
+      if @user = find_by_slug(params[:slug])
+        erb :"users/show"
+      end
   end
 
 end

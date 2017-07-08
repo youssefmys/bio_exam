@@ -3,6 +3,9 @@
   </head>
   <body>
     <h3>Show page</h3>
+    <h3>Welcome, <%=@user.username %></h3>
+    <h3>your email is <%=@user.email %></h3>
+    <h3>you are a <%= @user.class.to_s %></h3>
   </body>
 
 </html>
