@@ -75,13 +75,20 @@ class ApplicationController < Sinatra::Base
   end
 
   patch '/questions/:id/edit' do
+
       if @question = Question.find_by(params[:id])
-        
+        @question.update(params[:question])
+        @question.answers.each_with_index do |answer, index|
+          answer.update(params[:answers][index])
+        end
+      @exam = Exam.find_by(id: params[:exam_id])
+      erb :"exams/show"
       end
     end
 
   post '/questions/:id/edit' do
   end
+
   get '/exams/:id' do
     @exam = Exam.find_by(:id => params[:id])
     erb :"exams/show"
