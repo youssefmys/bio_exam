@@ -1,0 +1,26 @@
+<html>
+<head>
+  <link rel = "stylesheet" type = "text/css" href = "/stylesheets/exam_style.css"/>
+</head>
+<body>
+  <div class = "question_box">
+    <h3><%=@question.content %></h3>
+    <% @question.answers.each_with_index do |answer, index| %>
+    <%=" #{('A'..'D').to_a[index]} - " %> <input type = "text" class = "choice" value = "<%=answer.content %>" />
+    <select>
+      <option><%=answer.right_answer.to_s %></option>
+      <option><%=(!answer.right_answer).to_s %></option>
+    </select>
+  <br>
+  <br>
+    <% end %>
+
+    <form action = "/exams/<%=@question.id %>/edit %>" method =  "post">
+      <input type = "hidden" name = "_method" value = "patch" >
+      <input type = "hidden" name = "exam_id" value = "<%= @exam.id %>" >
+      <button type = "submit">Edit</button>
+    </form>
+
+  </div>
+</body>
+</html>

@@ -1,19 +1,42 @@
 <html>
 <head>
+  <link rel = "stylesheet" type = "text/css" href = "/stylesheets/exam_style.css"/>
 </head>
 <body>
   Exam title : <%= @exam.name %> <br>
-  <% if !@exam.questions.empty? %>
-    <% @exam.questions.each_with_index do |question, index|%>
-      <h3><%= "#{index + 1} - #{question.content}" %></h3> 
-      <% question.answers.each_with_index do |answer, index| %>
-        <%="   #{('a'..'d').to_a[index]} - #{answer.content} "%> <br>
-      <% end %>
-    <% end %>
-  <% end %>
+<% if @exam.questions.count > 0 %>
   <form action = "/create_question" method =  "get">
     <input type = "hidden" name = "exam_id" value = "<%= @exam.id %>" >
     <button type = "submit">Add question</button>
   </form>
-</body>
-</html>
+<% end %>
+
+  <% if !@exam.questions.empty? %>
+  <% @exam.questions.each_with_index do |question, index|%>
+  <div class = "question_box">
+    <h3><%= "#{index + 1} - #{question.content}" %></h3>
+    <% question.answers.each_with_index do |answer, index| %>
+    <p class = "choice"><%="   #{('A'..'D').to_a[index]} - #{answer.content} "%></p>
+    <p class = "correction"><%= "#{answer.right_answer.to_s}"%></p><br>
+    <% end %>
+
+    <form method = "get" action =  "/questions/<%=question.id %>/edit">
+      <input type = "hidden" name = "exam_id" value = "<%=@exam.id %>">
+      <button type = "submit">Edit question</button>
+    </form>
+
+    <form action = "/questions/<%=question.id %>/delete" method =  "post">
+      <input type = "hidden" name = "_method" value = "delete" >
+      <input type = "hidden" name = "exam_id" value = "<%=@exam.id %>" >
+      <button style = " color: red;" type = "submit">Delete question</button>
+    </form>
+
+  </div>
+    <% end %>
+    <% end %>
+    <form action = "/create_question" method =  "get">
+      <input type = "hidden" name = "exam_id" value = "<%= @exam.id %>" >
+      <button type = "submit">Add question</button>
+    </form>
+  </body>
+  </html>

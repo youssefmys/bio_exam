@@ -59,6 +59,29 @@ class ApplicationController < Sinatra::Base
     redirect "/exams/#{exam.id}"
   end
 
+  delete '/questions/:id/delete' do
+    if question = Question.find_by(params[:id])
+      @exam = Exam.find_by(id: params[:exam_id])
+      question.delete
+      erb :"exams/show"
+    end
+  end
+
+  get '/questions/:id/edit' do
+    if @question = Question.find_by(params[:id])
+      @exam = Exam.find_by(:id => params[:exam_id])
+      erb :"questions/edit"
+    end
+  end
+
+  patch '/questions/:id/edit' do
+      if @question = Question.find_by(params[:id])
+        
+      end
+    end
+
+  post '/questions/:id/edit' do
+  end
   get '/exams/:id' do
     @exam = Exam.find_by(:id => params[:id])
     erb :"exams/show"
